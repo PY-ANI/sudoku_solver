@@ -13,6 +13,7 @@ width,height=450,450
 win=pygame.display.set_mode((width,height+100))
 pygame.display.set_caption("   SUDOKU   ")
 
+# sprite loading
 board=pygame.transform.scale(pygame.image.load("./utils/sudoku.png"),(width,height))
 pause_png=pygame.transform.scale(pygame.image.load("./utils/pause.png"),(30,30))
 resume_png=pygame.transform.scale(pygame.image.load("./utils/resume_s.png"),(30,30))
@@ -23,12 +24,14 @@ cancel_button=button(win,"CANCEL",22,(255,255,255),270,height+60)
 game_state_button=button(win,"pause_resume",30,(0,0,0),180,10)
 new_set=button(win,"new",30,(0,0,0),240,10)
 
+# grid of 9x9
 grid=[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
 
 grid[randrange(9)][randrange(9)]=randrange(1,10)
 
+# keeping track of locked cells 
 locked={0:[],1:[],2:[],3:[],4:[],5:[],6:[],7:[],8:[]}
 
 thread=None
@@ -40,6 +43,7 @@ pause=False
 
 Solve=solver(grid)
 
+# countdown timer function 
 def timer():
     global current_time,pause
     time.sleep(1)
@@ -49,7 +53,7 @@ def timer():
         time.sleep(1)
 
 def reset():
-    global moves,current_time,actual_time,grid,active_cell
+    global moves,current_time,actual_time,grid,active_cell,locked
 
     moves=0
     current_time=0
@@ -63,6 +67,7 @@ def setup():
     global moves,current_time,grid,active_cell
 
     for i in range(9):
+        locked[i].clear()
         for j in range(9):
             if grid[i][j] != 0:locked[i].append(j)
             if active_cell == None and grid[i][j] == 0: active_cell=[50*j,50*(i+1)]
